@@ -179,7 +179,7 @@ class AdminUtils {
   static String? validateFareData({
     required String routeId,
     required int standardFare,
-    required int peakMultiplier,
+    required double peakMultiplier,
   }) {
     if (routeId.trim().isEmpty) {
       return 'Route ID cannot be empty';
@@ -199,7 +199,7 @@ class AdminUtils {
   /// Calculate fare with peak hours consideration
   static int calculateFare({
     required int standardFare,
-    required int peakMultiplier,
+    required double peakMultiplier,
     required DateTime currentTime,
     required String peakHoursStart,
     required String peakHoursEnd,
@@ -242,7 +242,7 @@ class AdminUtils {
         isPeakHour = currentMinutes >= startMinutes || currentMinutes < endMinutes;
       }
 
-      return isPeakHour ? standardFare * peakMultiplier : standardFare;
+      return isPeakHour ? (standardFare * peakMultiplier).round() : standardFare;
     } catch (e) {
       debugPrint('Error calculating peak fare: $e');
       return standardFare;

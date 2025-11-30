@@ -36,8 +36,8 @@ class FaresRecord extends FirestoreRecord {
   bool hasStandardFare() => _standardFare != null;
 
   // "peak_multiplier" field.
-  int? _peakMultiplier;
-  int get peakMultiplier => _peakMultiplier ?? 0;
+  double? _peakMultiplier;
+  double get peakMultiplier => _peakMultiplier ?? 0.0;
   bool hasPeakMultiplier() => _peakMultiplier != null;
 
   void _initializeFields() {
@@ -45,7 +45,7 @@ class FaresRecord extends FirestoreRecord {
     _peakHoursStarts = snapshotData['peak_hours_starts'] as String?;
     _routeId = snapshotData['route_id'] as String?;
     _standardFare = castToType<int>(snapshotData['standard_fare']);
-    _peakMultiplier = castToType<int>(snapshotData['peak_multiplier']);
+    _peakMultiplier = castToType<double>(snapshotData['peak_multiplier']);
   }
 
   static CollectionReference get collection =>
@@ -86,7 +86,7 @@ Map<String, dynamic> createFaresRecordData({
   String? peakHoursStarts,
   String? routeId,
   int? standardFare,
-  int? peakMultiplier,
+  double? peakMultiplier,
 }) {
   final firestoreData = mapToFirestore(
     <String, dynamic>{
