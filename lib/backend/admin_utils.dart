@@ -23,15 +23,18 @@ class AdminUtils {
         return true;
       }
 
-      // Method 2: Check Users collection role
+      // Method 2: Check Users collection role or is_admin field
       final userDoc = await FirebaseFirestore.instance
           .collection('Users')
           .doc(user.uid)
           .get();
 
       if (userDoc.exists) {
-        final role = userDoc.data()?['role'] as String?;
-        return role == 'admin';
+        final data = userDoc.data();
+        // Check both is_admin (matches Firestore rules) and role (legacy)
+        final isAdmin = data?['is_admin'] as bool?;
+        final role = data?['role'] as String?;
+        return isAdmin == true || role == 'admin';
       }
 
       return false;
@@ -155,7 +158,7 @@ class AdminUtils {
   static String? validateRouteData({
     required String origin,
     required String destination,
-    required String routeid,
+    required String routeId,
   }) {
     if (origin.trim().isEmpty) {
       return 'Origin cannot be empty';
@@ -163,7 +166,7 @@ class AdminUtils {
     if (destination.trim().isEmpty) {
       return 'Destination cannot be empty';
     }
-    if (routeid.trim().isEmpty) {
+    if (routeId.trim().isEmpty) {
       return 'Route ID cannot be empty';
     }
     if (origin.trim() == destination.trim()) {

@@ -67,7 +67,8 @@ class CreateDefaultAdmin {
         'email': defaultAdminEmail,
         'uid': uid,
         'display_name': defaultAdminName,
-        'role': 'admin',
+        'is_admin': true,  // Match your Firestore rules
+        'role': 'admin',   // Keep for compatibility
         'created_time': FieldValue.serverTimestamp(),
         'updatedAt': FieldValue.serverTimestamp(),
       }, SetOptions(merge: true));
@@ -79,7 +80,8 @@ class CreateDefaultAdmin {
         'adminid': uid,
         'email': defaultAdminEmail,
         'name': defaultAdminName,
-        'role': 'admin',
+        'is_admin': true,  // Match your Firestore rules
+        'role': 'admin',   // Keep for compatibility
       }, SetOptions(merge: true));
       debugPrint('✓ Admin collection updated');
 

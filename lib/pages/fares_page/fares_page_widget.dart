@@ -2,6 +2,7 @@ import '/backend/backend.dart';
 import '/flutter_flow/flutter_flow_icon_button.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
+import '/flutter_flow/flutter_flow_widgets.dart';
 import '/index.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -70,9 +71,66 @@ class _FaresPageWidgetState extends State<FaresPageWidget> {
           );
         }
         List<FaresRecord> faresPageFaresRecordList = snapshot.data!;
-        // Return an empty Container when the item does not exist.
+        // Show error screen when no fare data exists
         if (snapshot.data!.isEmpty) {
-          return Container();
+          return Scaffold(
+            backgroundColor: FlutterFlowTheme.of(context).primaryBackground,
+            appBar: AppBar(
+              backgroundColor: FlutterFlowTheme.of(context).secondaryBackground,
+              leading: FlutterFlowIconButton(
+                borderColor: Colors.transparent,
+                borderRadius: 30.0,
+                buttonSize: 60.0,
+                icon: Icon(
+                  Icons.arrow_back_rounded,
+                  color: FlutterFlowTheme.of(context).primaryText,
+                  size: 30.0,
+                ),
+                onPressed: () async {
+                  context.pushNamed(RoutesPageWidget.routeName);
+                },
+              ),
+              title: Text('Route Not Found'),
+            ),
+            body: Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(
+                    Icons.error_outline,
+                    size: 80,
+                    color: FlutterFlowTheme.of(context).error,
+                  ),
+                  SizedBox(height: 20),
+                  Text(
+                    'No fare information available',
+                    style: FlutterFlowTheme.of(context).headlineSmall,
+                  ),
+                  SizedBox(height: 10),
+                  Text(
+                    'Please select a valid route',
+                    style: FlutterFlowTheme.of(context).bodyMedium,
+                  ),
+                  SizedBox(height: 30),
+                  FFButtonWidget(
+                    onPressed: () async {
+                      context.pushNamed(RoutesPageWidget.routeName);
+                    },
+                    text: 'View Available Routes',
+                    options: FFButtonOptions(
+                      padding: EdgeInsetsDirectional.fromSTEB(24, 12, 24, 12),
+                      color: FlutterFlowTheme.of(context).primary,
+                      textStyle: FlutterFlowTheme.of(context).titleSmall.override(
+                        font: GoogleFonts.interTight(),
+                        color: Colors.white,
+                      ),
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          );
         }
         final faresPageFaresRecord = faresPageFaresRecordList.isNotEmpty
             ? faresPageFaresRecordList.first
@@ -171,7 +229,7 @@ class _FaresPageWidgetState extends State<FaresPageWidget> {
                     StreamBuilder<List<RoutesRecord>>(
                       stream: queryRoutesRecord(
                         queryBuilder: (routesRecord) => routesRecord.where(
-                          'routeid',
+                          'route_id',
                           isEqualTo: widget.routeID,
                         ),
                         singleRecord: true,
@@ -341,10 +399,21 @@ class _FaresPageWidgetState extends State<FaresPageWidget> {
                         ],
                       ),
                     ),
-                    Text(
-                      'Prices may increase during peak hours (${faresPageFaresRecord?.peakHoursStarts}to${faresPageFaresRecord?.peakHoursEnd}). The maximum peak multiplier is${faresPageFaresRecord?.peakMultiplier.toString()}',
-                      style: FlutterFlowTheme.of(context).bodyMedium.override(
-                            font: GoogleFonts.inter(
+                    Padding(
+                      padding: const EdgeInsetsDirectional.fromSTEB(24.0, 16.0, 24.0, 0.0),
+                      child: Text(
+                        'Prices may increase during peak hours (${faresPageFaresRecord?.peakHoursStarts} to ${faresPageFaresRecord?.peakHoursEnd}). The maximum peak multiplier is ${faresPageFaresRecord?.peakMultiplier.toString()}x.',
+                        style: FlutterFlowTheme.of(context).bodyMedium.override(
+                              font: GoogleFonts.inter(
+                                fontWeight: FlutterFlowTheme.of(context)
+                                    .bodyMedium
+                                    .fontWeight,
+                                fontStyle: FlutterFlowTheme.of(context)
+                                    .bodyMedium
+                                    .fontStyle,
+                              ),
+                              color: FlutterFlowTheme.of(context).secondaryText,
+                              letterSpacing: 0.0,
                               fontWeight: FlutterFlowTheme.of(context)
                                   .bodyMedium
                                   .fontWeight,
@@ -352,14 +421,7 @@ class _FaresPageWidgetState extends State<FaresPageWidget> {
                                   .bodyMedium
                                   .fontStyle,
                             ),
-                            letterSpacing: 0.0,
-                            fontWeight: FlutterFlowTheme.of(context)
-                                .bodyMedium
-                                .fontWeight,
-                            fontStyle: FlutterFlowTheme.of(context)
-                                .bodyMedium
-                                .fontStyle,
-                          ),
+                      ),
                     ),
                     Align(
                       alignment: const AlignmentDirectional(0.0, 1.0),

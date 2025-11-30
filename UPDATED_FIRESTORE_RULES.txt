@@ -1,0 +1,58 @@
+rules_version = '2';
+service cloud.firestore {
+    match /databases/{database}/documents {
+
+        // --- 1. ADMIN CHECK FUNCTION ---
+        // Checks if the user is authenticated AND if their 'Users' document has is_admin: true
+        function isAdmin() {
+            return request.auth != null &&
+                   get(/databases/$(database)/documents/Users/$(request.auth.uid)).data.is_admin == true;
+        }
+
+        // --- 2. USERS Collection (Collection name: 'Users') ---
+        match /Users/{userId} {
+            // Allows any authenticated user to create their profile document
+            allow create: if request.auth != null;
+
+            // Allows read/update/delete only if the user is accessing their own document
+            // OR if they are an admin (for admin management)
+            allow read: if request.auth.uid == userId || isAdmin();
+            allow update: if request.auth.uid == userId || isAdmin();
+            allow delete: if request.auth.uid == userId;
+        }
+
+        // --- 3. ADMIN Collection (Collection name: 'Admin') ---
+        match /Admin/{documentId} {
+            // Allow read if user is admin
+            allow read: if isAdmin();
+
+            // FIXED: Allow creation by authenticated users (for initial admin setup)
+            // This allows the first admin to be created
+            allow create: if request.auth != null && request.auth.uid == documentId;
+
+            // Only admins can update/delete admin records
+            allow update, delete: if isAdmin();
+        }
+
+        // --- 4. ROUTES Collection (Collection name: 'Routes') ---
+        match /Routes/{routeId} {
+            // Public users can read only verified routes
+            allow read: if resource.data.is_verified == true;
+
+            // Only Admins can create, update, or delete routes (CRUD)
+            allow write: if isAdmin();
+        }
+
+        // --- 5. FARES Collection (Collection name: 'Fares') ---
+        match /Fares/{fareId} {
+            // Authenticated users can read all fares for estimation
+            allow read: if request.auth != null;
+
+            // Authenticated users can create new fare reports (Crowdsourcing)
+            allow create: if request.auth != null;
+
+            // Only Admins can update or delete fares (verification/management)
+            allow update, delete: if isAdmin();
+        }
+    }
+}

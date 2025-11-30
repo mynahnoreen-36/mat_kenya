@@ -1,3 +1,4 @@
+import '/backend/admin_utils.dart';
 import '/flutter_flow/flutter_flow_expanded_image_view.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
@@ -113,6 +114,19 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                     ),
               ),
             ),
+            Padding(
+              padding: const EdgeInsetsDirectional.fromSTEB(8.0, 0.0, 16.0, 0.0),
+              child: IconButton(
+                icon: Icon(
+                  Icons.person,
+                  color: Colors.white,
+                  size: 28.0,
+                ),
+                onPressed: () async {
+                  context.pushNamed(ProfilePageWidget.routeName);
+                },
+              ),
+            ),
           ],
           centerTitle: false,
           elevation: 0.0,
@@ -199,58 +213,6 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                   child: FFButtonWidget(
                     onPressed: () async {
                       context.pushNamed(
-                        FaresPageWidget.routeName,
-                        queryParameters: {
-                          'routeID': serializeParam(
-                            '',
-                            ParamType.String,
-                          ),
-                        }.withoutNulls,
-                      );
-                    },
-                    text: FFLocalizations.of(context).getText(
-                      'u6swthju' /* Estimate Fare */,
-                    ),
-                    options: FFButtonOptions(
-                      width: 360.0,
-                      height: 48.0,
-                      padding:
-                          const EdgeInsetsDirectional.fromSTEB(16.0, 0.0, 16.0, 0.0),
-                      iconPadding:
-                          const EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 0.0),
-                      color: FlutterFlowTheme.of(context).primary,
-                      textStyle:
-                          FlutterFlowTheme.of(context).titleSmall.override(
-                                font: GoogleFonts.interTight(
-                                  fontWeight: FlutterFlowTheme.of(context)
-                                      .titleSmall
-                                      .fontWeight,
-                                  fontStyle: FlutterFlowTheme.of(context)
-                                      .titleSmall
-                                      .fontStyle,
-                                ),
-                                color: Colors.white,
-                                letterSpacing: 0.0,
-                                fontWeight: FlutterFlowTheme.of(context)
-                                    .titleSmall
-                                    .fontWeight,
-                                fontStyle: FlutterFlowTheme.of(context)
-                                    .titleSmall
-                                    .fontStyle,
-                              ),
-                      elevation: 3.0,
-                      borderSide: const BorderSide(
-                        width: 1.0,
-                      ),
-                      borderRadius: BorderRadius.circular(12.0),
-                    ),
-                  ),
-                ),
-                Align(
-                  alignment: const AlignmentDirectional(0.0, 0.0),
-                  child: FFButtonWidget(
-                    onPressed: () async {
-                      context.pushNamed(
                         MapPageWidget.routeName,
                         queryParameters: {
                           'selectedRouteName': serializeParam(
@@ -297,6 +259,48 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                       borderRadius: BorderRadius.circular(12.0),
                     ),
                   ),
+                ),
+                // Admin Data Upload Button (only visible to admins)
+                FutureBuilder<bool>(
+                  future: AdminUtils.isCurrentUserAdmin(),
+                  builder: (context, snapshot) {
+                    if (snapshot.data == true) {
+                      return Padding(
+                        padding: const EdgeInsetsDirectional.fromSTEB(0.0, 8.0, 0.0, 8.0),
+                        child: Align(
+                          alignment: const AlignmentDirectional(0.0, 0.0),
+                          child: FFButtonWidget(
+                            onPressed: () async {
+                              context.pushNamed(AdminDataPageWidget.routeName);
+                            },
+                            text: 'Admin: Upload Data',
+                            icon: Icon(
+                              Icons.cloud_upload,
+                              size: 20.0,
+                            ),
+                            options: FFButtonOptions(
+                              width: 360.0,
+                              height: 48.0,
+                              padding: const EdgeInsetsDirectional.fromSTEB(16.0, 0.0, 16.0, 0.0),
+                              iconPadding: const EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 0.0),
+                              color: Color(0xFFFF6F00),
+                              textStyle: FlutterFlowTheme.of(context).titleSmall.override(
+                                font: GoogleFonts.interTight(),
+                                color: Colors.white,
+                              ),
+                              elevation: 3.0,
+                              borderSide: const BorderSide(
+                                color: Colors.transparent,
+                                width: 1.0,
+                              ),
+                              borderRadius: BorderRadius.circular(12.0),
+                            ),
+                          ),
+                        ),
+                      );
+                    }
+                    return SizedBox.shrink();
+                  },
                 ),
                 Padding(
                   padding: const EdgeInsetsDirectional.fromSTEB(16.0, 0.0, 0.0, 0.0),

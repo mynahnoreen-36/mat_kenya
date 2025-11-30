@@ -31,6 +31,8 @@ firebase.json
 .firebaserc
 firebase/functions/node_modules/
 firebase/functions/.env
+scripts/serviceAccountKey.json
+**/serviceAccountKey*.json
 
 # API Keys and Secrets
 **/api_keys.dart

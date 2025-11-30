@@ -25,10 +25,10 @@ class RoutesRecord extends FirestoreRecord {
   String get origin => _origin ?? '';
   bool hasOrigin() => _origin != null;
 
-  // "routeid" field.
-  String? _routeid;
-  String get routeid => _routeid ?? '';
-  bool hasRouteid() => _routeid != null;
+  // "route_id" field.
+  String? _routeId;
+  String get routeId => _routeId ?? '';
+  bool hasRouteId() => _routeId != null;
 
   // "is_verified" field.
   bool? _isVerified;
@@ -43,7 +43,7 @@ class RoutesRecord extends FirestoreRecord {
   void _initializeFields() {
     _destination = snapshotData['destination'] as String?;
     _origin = snapshotData['origin'] as String?;
-    _routeid = snapshotData['routeid'] as String?;
+    _routeId = snapshotData['route_id'] as String?;
     _isVerified = snapshotData['is_verified'] as bool?;
     _stages = snapshotData['stages'] as String?;
   }
@@ -84,7 +84,7 @@ class RoutesRecord extends FirestoreRecord {
 Map<String, dynamic> createRoutesRecordData({
   String? destination,
   String? origin,
-  String? routeid,
+  String? routeId,
   bool? isVerified,
   String? stages,
 }) {
@@ -92,7 +92,7 @@ Map<String, dynamic> createRoutesRecordData({
     <String, dynamic>{
       'destination': destination,
       'origin': origin,
-      'routeid': routeid,
+      'route_id': routeId,
       'is_verified': isVerified,
       'stages': stages,
     }.withoutNulls,
@@ -108,14 +108,14 @@ class RoutesRecordDocumentEquality implements Equality<RoutesRecord> {
   bool equals(RoutesRecord? e1, RoutesRecord? e2) {
     return e1?.destination == e2?.destination &&
         e1?.origin == e2?.origin &&
-        e1?.routeid == e2?.routeid &&
+        e1?.routeId == e2?.routeId &&
         e1?.isVerified == e2?.isVerified &&
         e1?.stages == e2?.stages;
   }
 
   @override
   int hash(RoutesRecord? e) => const ListEquality()
-      .hash([e?.destination, e?.origin, e?.routeid, e?.isVerified, e?.stages]);
+      .hash([e?.destination, e?.origin, e?.routeId, e?.isVerified, e?.stages]);
 
   @override
   bool isValidKey(Object? o) => o is RoutesRecord;

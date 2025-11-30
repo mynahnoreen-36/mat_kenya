@@ -1,0 +1,135 @@
+[
+  {
+    "route_id": "route_1",
+    "origin": "Nairobi CBD",
+    "destination": "Westlands",
+    "stages": "Nairobi CBD,Uhuru Highway,Museum Hill,Parklands,Sarit Centre,Westlands",
+    "is_verified": true
+  },
+  {
+    "route_id": "route_2",
+    "origin": "Nairobi CBD",
+    "destination": "Karen",
+    "stages": "Nairobi CBD,Nyayo Stadium,Yaya Centre,Adams Arcade,Hardy,Karen",
+    "is_verified": true
+  },
+  {
+    "route_id": "route_3",
+    "origin": "Nairobi CBD",
+    "destination": "Ngong",
+    "stages": "Nairobi CBD,Nyayo Stadium,Dagoretti Corner,Riruta,Uthiru,Karen Junction,Ngong",
+    "is_verified": true
+  },
+  {
+    "route_id": "route_4",
+    "origin": "Nairobi CBD",
+    "destination": "Thika",
+    "stages": "Nairobi CBD,Pangani,Roysambu,Kasarani,Mwiki,Githurai 45,Ruiru,Thika",
+    "is_verified": true
+  },
+  {
+    "route_id": "route_5",
+    "origin": "Nairobi CBD",
+    "destination": "Embakasi",
+    "stages": "Nairobi CBD,Makongeni,Kaloleni,Jericho,Donholm,Umoja,Buruburu,Embakasi",
+    "is_verified": true
+  },
+  {
+    "route_id": "route_6",
+    "origin": "Mombasa Town",
+    "destination": "Nyali",
+    "stages": "Mombasa Town,Kizingo,Nyali Bridge,Nyali Cinemax,City Mall,Nyali",
+    "is_verified": true
+  },
+  {
+    "route_id": "route_7",
+    "origin": "Mombasa Town",
+    "destination": "Likoni",
+    "stages": "Mombasa Town,Likoni Ferry,Shelly Beach,Tiwi Junction,Likoni",
+    "is_verified": true
+  },
+  {
+    "route_id": "route_8",
+    "origin": "Mombasa Town",
+    "destination": "Bamburi",
+    "stages": "Mombasa Town,Mwembe Tayari,Nyali,Kongowea,Bamburi Mtambo,Bamburi",
+    "is_verified": true
+  },
+  {
+    "route_id": "route_9",
+    "origin": "Nyali",
+    "destination": "Bamburi",
+    "stages": "Nyali,Nyali Bridge,Reef Hotel,Mamba Village,Bombolulu,Bamburi",
+    "is_verified": true
+  },
+  {
+    "route_id": "route_10",
+    "origin": "Nakuru Town",
+    "destination": "Free Area",
+    "stages": "Nakuru Town,Kenyatta Avenue,Stadium,Pangani,Kivumbini,Free Area",
+    "is_verified": true
+  },
+  {
+    "route_id": "route_11",
+    "origin": "Nakuru Town",
+    "destination": "Lanet",
+    "stages": "Nakuru Town,Kenyatta Avenue,London,Milimani,Lanet Barracks,Lanet",
+    "is_verified": true
+  },
+  {
+    "route_id": "route_12",
+    "origin": "Nakuru Town",
+    "destination": "Section 58",
+    "stages": "Nakuru Town,Kenyatta Avenue,Flamingo,Mwariki,Section 7,Section 58",
+    "is_verified": true
+  },
+  {
+    "route_id": "route_13",
+    "origin": "Eldoret Town",
+    "destination": "Langas",
+    "stages": "Eldoret Town,Rupa's Mall,Kapsoya,Huruma,Langas Estate,Langas",
+    "is_verified": true
+  },
+  {
+    "route_id": "route_14",
+    "origin": "Eldoret Town",
+    "destination": "Pioneer",
+    "stages": "Eldoret Town,Uganda Road,Kipkaren,West Indies,Pioneer Estate,Pioneer",
+    "is_verified": true
+  },
+  {
+    "route_id": "route_15",
+    "origin": "Eldoret Town",
+    "destination": "Elgon View",
+    "stages": "Eldoret Town,Oginga Odinga Street,Race Course,Kapseret,Elgon View Estate,Elgon View",
+    "is_verified": true
+  },
+  {
+    "route_id": "route_16",
+    "origin": "Kisumu Town",
+    "destination": "Kondele",
+    "stages": "Kisumu Town,Kibuye Market,Jubilee Market,Kondele Roundabout,Kondele",
+    "is_verified": true
+  },
+  {
+    "route_id": "route_17",
+    "origin": "Kisumu Town",
+    "destination": "Mamboleo",
+    "stages": "Kisumu Town,Kibuye Market,Kondele,Nyamasaria,Mamboleo Estate,Mamboleo",
+    "is_verified": true
+  },
+  {
+    "route_id": "route_18",
+    "origin": "Kisumu Town",
+    "destination": "Manyatta",
+    "stages": "Kisumu Town,Kibuye Market,Kondele,Railway Station,Manyatta Estate,Manyatta",
+    "is_verified": true
+  },
+  {
+    "route_id": "route_19",
+    "origin": "Kondele",
+    "destination": "Mamboleo",
+    "stages": "Kondele,Kondele Roundabout,Nyamasaria,Migosi,Mamboleo Junction,Mamboleo",
+    "is_verified": true
+  }
+]

@@ -30,34 +30,6 @@ class _SignupPageWidgetState extends State<SignupPageWidget> {
     super.initState();
     _model = createModel(context, () => SignupPageModel());
 
-    // On page load action.
-    SchedulerBinding.instance.addPostFrameCallback((_) async {
-      GoRouter.of(context).prepareAuthEvent();
-      if (_model.passwordTextController.text !=
-          _model.passwordConfirmTextController.text) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text(
-              'Passwords don\'t match!',
-            ),
-          ),
-        );
-        return;
-      }
-
-      final user = await authManager.createAccountWithEmail(
-        context,
-        _model.emailAddressTextController.text,
-        _model.passwordTextController.text,
-      );
-      if (user == null) {
-        return;
-      }
-      if (!context.mounted) return;
-
-      context.goNamedAuth(HomePageWidget.routeName, context.mounted);
-    });
-
     _model.emailAddressTextController ??= TextEditingController();
     _model.emailAddressFocusNode ??= FocusNode();
 

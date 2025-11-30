@@ -150,6 +150,11 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
           name: SetupAdminPageWidget.routeName,
           path: SetupAdminPageWidget.routePath,
           builder: (context, params) => const SetupAdminPageWidget(),
+        ),
+        FFRoute(
+          name: AdminDataPageWidget.routeName,
+          path: AdminDataPageWidget.routePath,
+          builder: (context, params) => const AdminDataPageWidget(),
         )
       ].map((r) => r.toRoute(appStateNotifier)).toList(),
     );

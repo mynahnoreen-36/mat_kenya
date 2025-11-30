@@ -1,0 +1,13 @@
+{
+  "name": "mat-kenya-scripts",
+  "version": "1.0.0",
+  "description": "Utility scripts for MAT Kenya app",
+  "main": "import_to_firebase.js",
+  "scripts": {
+    "import": "node import_to_firebase.js",
+    "generate": "python3 generate_mock_data.py"
+  },
+  "dependencies": {
+    "firebase-admin": "^12.0.0"
+  }
+}
