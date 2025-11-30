@@ -40,12 +40,32 @@ class RoutesRecord extends FirestoreRecord {
   String get stages => _stages ?? '';
   bool hasStages() => _stages != null;
 
+  // "stages_coordinates" field.
+  List<LatLng>? _stagesCoordinates;
+  List<LatLng> get stagesCoordinates => _stagesCoordinates ?? const [];
+  bool hasStagesCoordinates() => _stagesCoordinates != null;
+
   void _initializeFields() {
     _destination = snapshotData['destination'] as String?;
     _origin = snapshotData['origin'] as String?;
     _routeId = snapshotData['route_id'] as String?;
     _isVerified = snapshotData['is_verified'] as bool?;
     _stages = snapshotData['stages'] as String?;
+    _stagesCoordinates = _parseCoordinates(snapshotData['stages_coordinates']);
+  }
+
+  List<LatLng> _parseCoordinates(dynamic coordinatesData) {
+    if (coordinatesData == null) return [];
+    if (coordinatesData is! List) return [];
+
+    return coordinatesData.map((coord) {
+      if (coord is Map) {
+        final lat = (coord['latitude'] as num?)?.toDouble() ?? 0.0;
+        final lng = (coord['longitude'] as num?)?.toDouble() ?? 0.0;
+        return LatLng(lat, lng);
+      }
+      return LatLng(0, 0);
+    }).toList();
   }
 
   static CollectionReference get collection =>
@@ -87,6 +107,7 @@ Map<String, dynamic> createRoutesRecordData({
   String? routeId,
   bool? isVerified,
   String? stages,
+  List<LatLng>? stagesCoordinates,
 }) {
   final firestoreData = mapToFirestore(
     <String, dynamic>{
@@ -95,6 +116,7 @@ Map<String, dynamic> createRoutesRecordData({
       'route_id': routeId,
       'is_verified': isVerified,
       'stages': stages,
+      'stages_coordinates': stagesCoordinates,
     }.withoutNulls,
   );
 

@@ -22,6 +22,18 @@ class _RoutesPageWidgetState extends State<RoutesPageWidget> {
   late RoutesPageModel _model;
 
   final scaffoldKey = GlobalKey<ScaffoldState>();
+  final TextEditingController _searchController = TextEditingController();
+  String _searchQuery = '';
+  String? _selectedCity;
+
+  final List<String> _cities = [
+    'All Cities',
+    'Nairobi',
+    'Mombasa',
+    'Nakuru',
+    'Eldoret',
+    'Kisumu',
+  ];
 
   @override
   void initState() {
@@ -32,8 +44,26 @@ class _RoutesPageWidgetState extends State<RoutesPageWidget> {
   @override
   void dispose() {
     _model.dispose();
-
+    _searchController.dispose();
     super.dispose();
+  }
+
+  List<RoutesRecord> _filterRoutes(List<RoutesRecord> routes) {
+    return routes.where((route) {
+      // Search filter
+      final matchesSearch = _searchQuery.isEmpty ||
+          route.origin.toLowerCase().contains(_searchQuery.toLowerCase()) ||
+          route.destination.toLowerCase().contains(_searchQuery.toLowerCase()) ||
+          route.stages.toLowerCase().contains(_searchQuery.toLowerCase());
+
+      // City filter
+      final matchesCity = _selectedCity == null ||
+          _selectedCity == 'All Cities' ||
+          route.origin.contains(_selectedCity!) ||
+          route.destination.contains(_selectedCity!);
+
+      return matchesSearch && matchesCity;
+    }).toList();
   }
 
   @override
@@ -90,6 +120,85 @@ class _RoutesPageWidgetState extends State<RoutesPageWidget> {
           mainAxisSize: MainAxisSize.max,
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
+            // Search and Filter Section
+            Container(
+              padding: EdgeInsets.all(16.0),
+              decoration: BoxDecoration(
+                color: FlutterFlowTheme.of(context).secondaryBackground,
+                boxShadow: [
+                  BoxShadow(
+                    blurRadius: 4.0,
+                    color: Color(0x1A000000),
+                    offset: Offset(0.0, 2.0),
+                  ),
+                ],
+              ),
+              child: Column(
+                children: [
+                  // Search TextField
+                  TextField(
+                    controller: _searchController,
+                    onChanged: (value) {
+                      setState(() {
+                        _searchQuery = value;
+                      });
+                    },
+                    decoration: InputDecoration(
+                      hintText: 'Search routes, places, or stages...',
+                      prefixIcon: Icon(Icons.search, color: FlutterFlowTheme.of(context).secondaryText),
+                      suffixIcon: _searchQuery.isNotEmpty
+                          ? IconButton(
+                              icon: Icon(Icons.clear, color: FlutterFlowTheme.of(context).secondaryText),
+                              onPressed: () {
+                                setState(() {
+                                  _searchController.clear();
+                                  _searchQuery = '';
+                                });
+                              },
+                            )
+                          : null,
+                      filled: true,
+                      fillColor: FlutterFlowTheme.of(context).primaryBackground,
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(12.0),
+                        borderSide: BorderSide.none,
+                      ),
+                      contentPadding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 14.0),
+                    ),
+                  ),
+                  SizedBox(height: 12.0),
+                  // City Filter Chips
+                  SingleChildScrollView(
+                    scrollDirection: Axis.horizontal,
+                    child: Row(
+                      children: _cities.map((city) {
+                        final isSelected = _selectedCity == city || (_selectedCity == null && city == 'All Cities');
+                        return Padding(
+                          padding: EdgeInsets.only(right: 8.0),
+                          child: FilterChip(
+                            label: Text(city),
+                            selected: isSelected,
+                            onSelected: (selected) {
+                              setState(() {
+                                _selectedCity = selected ? (city == 'All Cities' ? null : city) : null;
+                              });
+                            },
+                            backgroundColor: FlutterFlowTheme.of(context).primaryBackground,
+                            selectedColor: FlutterFlowTheme.of(context).primary,
+                            labelStyle: TextStyle(
+                              color: isSelected ? Colors.white : FlutterFlowTheme.of(context).primaryText,
+                              fontWeight: isSelected ? FontWeight.w600 : FontWeight.normal,
+                            ),
+                            checkmarkColor: Colors.white,
+                            padding: EdgeInsets.symmetric(horizontal: 12.0, vertical: 8.0),
+                          ),
+                        );
+                      }).toList(),
+                    ),
+                  ),
+                ],
+              ),
+            ),
             StreamBuilder<List<RoutesRecord>>(
               stream: queryRoutesRecord(
                 queryBuilder: (routesRecord) => routesRecord.where(
@@ -100,19 +209,49 @@ class _RoutesPageWidgetState extends State<RoutesPageWidget> {
               builder: (context, snapshot) {
                 // Customize what your widget looks like when it's loading.
                 if (!snapshot.hasData) {
-                  return Center(
-                    child: SizedBox(
-                      width: 50.0,
-                      height: 50.0,
-                      child: CircularProgressIndicator(
-                        valueColor: AlwaysStoppedAnimation<Color>(
-                          FlutterFlowTheme.of(context).primary,
+                  return Expanded(
+                    child: Center(
+                      child: SizedBox(
+                        width: 50.0,
+                        height: 50.0,
+                        child: CircularProgressIndicator(
+                          valueColor: AlwaysStoppedAnimation<Color>(
+                            FlutterFlowTheme.of(context).primary,
+                          ),
                         ),
                       ),
                     ),
                   );
                 }
-                List<RoutesRecord> listViewRoutesRecordList = snapshot.data!;
+                List<RoutesRecord> allRoutes = snapshot.data!;
+                List<RoutesRecord> listViewRoutesRecordList = _filterRoutes(allRoutes);
+
+                // Show "no results" message
+                if (listViewRoutesRecordList.isEmpty) {
+                  return Expanded(
+                    child: Center(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(Icons.search_off, size: 64.0, color: FlutterFlowTheme.of(context).secondaryText),
+                          SizedBox(height: 16.0),
+                          Text(
+                            'No routes found',
+                            style: FlutterFlowTheme.of(context).headlineSmall,
+                          ),
+                          SizedBox(height: 8.0),
+                          Text(
+                            'Try adjusting your search or filter',
+                            style: FlutterFlowTheme.of(context).bodyMedium.override(
+                              font: GoogleFonts.inter(),
+                              color: FlutterFlowTheme.of(context).secondaryText,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  );
+                }
 
                 return Expanded(
                   child: ListView.builder(

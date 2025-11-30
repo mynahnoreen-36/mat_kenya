@@ -44,6 +44,14 @@ class _AdminDataPageWidgetState extends State<AdminDataPageWidget> {
       "origin": "Nairobi CBD",
       "destination": "Westlands",
       "stages": "Nairobi CBD,Uhuru Highway,Museum Hill,Parklands,Sarit Centre,Westlands",
+      "stages_coordinates": [
+        {"latitude": -1.286389, "longitude": 36.817223}, // Nairobi CBD
+        {"latitude": -1.2921, "longitude": 36.8219},     // Uhuru Highway
+        {"latitude": -1.2695, "longitude": 36.8162},     // Museum Hill
+        {"latitude": -1.2574, "longitude": 36.8153},     // Parklands
+        {"latitude": -1.2632, "longitude": 36.8077},     // Sarit Centre
+        {"latitude": -1.2676, "longitude": 36.8108}      // Westlands
+      ],
       "is_verified": true
     },
     {
@@ -51,6 +59,14 @@ class _AdminDataPageWidgetState extends State<AdminDataPageWidget> {
       "origin": "Nairobi CBD",
       "destination": "Karen",
       "stages": "Nairobi CBD,Nyayo Stadium,Yaya Centre,Adams Arcade,Hardy,Karen",
+      "stages_coordinates": [
+        {"latitude": -1.286389, "longitude": 36.817223},
+        {"latitude": -1.300447, "longitude": 36.822537},
+        {"latitude": -1.283744, "longitude": 36.787308},
+        {"latitude": -1.290917, "longitude": 36.782135},
+        {"latitude": -1.306667, "longitude": 36.744444},
+        {"latitude": -1.320889, "longitude": 36.708333}
+      ],
       "is_verified": true
     },
     {
@@ -58,6 +74,15 @@ class _AdminDataPageWidgetState extends State<AdminDataPageWidget> {
       "origin": "Nairobi CBD",
       "destination": "Ngong",
       "stages": "Nairobi CBD,Nyayo Stadium,Dagoretti Corner,Riruta,Uthiru,Karen Junction,Ngong",
+      "stages_coordinates": [
+        {"latitude": -1.286389, "longitude": 36.817223},
+        {"latitude": -1.300447, "longitude": 36.822537},
+        {"latitude": -1.301111, "longitude": 36.754722},
+        {"latitude": -1.300556, "longitude": 36.732778},
+        {"latitude": -1.269722, "longitude": 36.702222},
+        {"latitude": -1.312778, "longitude": 36.700556},
+        {"latitude": -1.3533, "longitude": 36.6503}
+      ],
       "is_verified": true
     },
     {
@@ -65,6 +90,16 @@ class _AdminDataPageWidgetState extends State<AdminDataPageWidget> {
       "origin": "Nairobi CBD",
       "destination": "Thika",
       "stages": "Nairobi CBD,Pangani,Roysambu,Kasarani,Mwiki,Githurai 45,Ruiru,Thika",
+      "stages_coordinates": [
+        {"latitude": -1.286389, "longitude": 36.817223},
+        {"latitude": -1.2678, "longitude": 36.8447},
+        {"latitude": -1.2217, "longitude": 36.8917},
+        {"latitude": -1.2137, "longitude": 36.8997},
+        {"latitude": -1.1867, "longitude": 36.9167},
+        {"latitude": -1.1633, "longitude": 36.9333},
+        {"latitude": -1.1417, "longitude": 36.9583},
+        {"latitude": -1.0333, "longitude": 37.0833}
+      ],
       "is_verified": true
     },
     {
@@ -72,6 +107,16 @@ class _AdminDataPageWidgetState extends State<AdminDataPageWidget> {
       "origin": "Nairobi CBD",
       "destination": "Embakasi",
       "stages": "Nairobi CBD,Makongeni,Kaloleni,Jericho,Donholm,Umoja,Buruburu,Embakasi",
+      "stages_coordinates": [
+        {"latitude": -1.286389, "longitude": 36.817223},
+        {"latitude": -1.2833, "longitude": 36.8333},
+        {"latitude": -1.2861, "longitude": 36.8464},
+        {"latitude": -1.2944, "longitude": 36.8556},
+        {"latitude": -1.2764, "longitude": 36.8892},
+        {"latitude": -1.2697, "longitude": 36.9056},
+        {"latitude": -1.2714, "longitude": 36.8878},
+        {"latitude": -1.3139, "longitude": 36.8944}
+      ],
       "is_verified": true
     },
     {
@@ -79,6 +124,14 @@ class _AdminDataPageWidgetState extends State<AdminDataPageWidget> {
       "origin": "Mombasa Town",
       "destination": "Nyali",
       "stages": "Mombasa Town,Kizingo,Nyali Bridge,Nyali Cinemax,City Mall,Nyali",
+      "stages_coordinates": [
+        {"latitude": -4.0435, "longitude": 39.6682},
+        {"latitude": -4.0611, "longitude": 39.6753},
+        {"latitude": -4.0435, "longitude": 39.6892},
+        {"latitude": -4.0297, "longitude": 39.6986},
+        {"latitude": -4.0278, "longitude": 39.7044},
+        {"latitude": -4.0217, "longitude": 39.7075}
+      ],
       "is_verified": true
     },
     {
@@ -86,6 +139,13 @@ class _AdminDataPageWidgetState extends State<AdminDataPageWidget> {
       "origin": "Mombasa Town",
       "destination": "Likoni",
       "stages": "Mombasa Town,Likoni Ferry,Shelly Beach,Tiwi Junction,Likoni",
+      "stages_coordinates": [
+        {"latitude": -4.0435, "longitude": 39.6682},
+        {"latitude": -4.0753, "longitude": 39.6736},
+        {"latitude": -4.1067, "longitude": 39.6906},
+        {"latitude": -4.1456, "longitude": 39.7117},
+        {"latitude": -4.0875, "longitude": 39.6772}
+      ],
       "is_verified": true
     },
     {
@@ -93,6 +153,14 @@ class _AdminDataPageWidgetState extends State<AdminDataPageWidget> {
       "origin": "Mombasa Town",
       "destination": "Bamburi",
       "stages": "Mombasa Town,Mwembe Tayari,Nyali,Kongowea,Bamburi Mtambo,Bamburi",
+      "stages_coordinates": [
+        {"latitude": -4.0435, "longitude": 39.6682},
+        {"latitude": -4.0572, "longitude": 39.6681},
+        {"latitude": -4.0217, "longitude": 39.7075},
+        {"latitude": -4.0003, "longitude": 39.7078},
+        {"latitude": -3.9836, "longitude": 39.7117},
+        {"latitude": -3.9767, "longitude": 39.7194}
+      ],
       "is_verified": true
     },
     {
@@ -100,6 +168,14 @@ class _AdminDataPageWidgetState extends State<AdminDataPageWidget> {
       "origin": "Nyali",
       "destination": "Bamburi",
       "stages": "Nyali,Nyali Bridge,Reef Hotel,Mamba Village,Bombolulu,Bamburi",
+      "stages_coordinates": [
+        {"latitude": -4.0217, "longitude": 39.7075},
+        {"latitude": -4.0435, "longitude": 39.6892},
+        {"latitude": -4.0111, "longitude": 39.7125},
+        {"latitude": -3.9919, "longitude": 39.7114},
+        {"latitude": -3.9847, "longitude": 39.7139},
+        {"latitude": -3.9767, "longitude": 39.7194}
+      ],
       "is_verified": true
     },
     {
@@ -107,6 +183,14 @@ class _AdminDataPageWidgetState extends State<AdminDataPageWidget> {
       "origin": "Nakuru Town",
       "destination": "Free Area",
       "stages": "Nakuru Town,Kenyatta Avenue,Stadium,Pangani,Kivumbini,Free Area",
+      "stages_coordinates": [
+        {"latitude": -0.3031, "longitude": 36.08},
+        {"latitude": -0.2857, "longitude": 36.0661},
+        {"latitude": -0.2797, "longitude": 36.0675},
+        {"latitude": -0.2722, "longitude": 36.0717},
+        {"latitude": -0.2656, "longitude": 36.0778},
+        {"latitude": -0.2594, "longitude": 36.0825}
+      ],
       "is_verified": true
     },
     {
@@ -114,6 +198,14 @@ class _AdminDataPageWidgetState extends State<AdminDataPageWidget> {
       "origin": "Nakuru Town",
       "destination": "Lanet",
       "stages": "Nakuru Town,Kenyatta Avenue,London,Milimani,Lanet Barracks,Lanet",
+      "stages_coordinates": [
+        {"latitude": -0.3031, "longitude": 36.08},
+        {"latitude": -0.2857, "longitude": 36.0661},
+        {"latitude": -0.2811, "longitude": 36.055},
+        {"latitude": -0.2783, "longitude": 36.0447},
+        {"latitude": -0.2553, "longitude": 36.0467},
+        {"latitude": -0.2458, "longitude": 36.0531}
+      ],
       "is_verified": true
     },
     {
@@ -121,6 +213,14 @@ class _AdminDataPageWidgetState extends State<AdminDataPageWidget> {
       "origin": "Nakuru Town",
       "destination": "Section 58",
       "stages": "Nakuru Town,Kenyatta Avenue,Flamingo,Mwariki,Section 7,Section 58",
+      "stages_coordinates": [
+        {"latitude": -0.3031, "longitude": 36.08},
+        {"latitude": -0.2857, "longitude": 36.0661},
+        {"latitude": -0.2928, "longitude": 36.0806},
+        {"latitude": -0.3042, "longitude": 36.0944},
+        {"latitude": -0.3139, "longitude": 36.1072},
+        {"latitude": -0.3217, "longitude": 36.1161}
+      ],
       "is_verified": true
     },
     {
@@ -128,6 +228,14 @@ class _AdminDataPageWidgetState extends State<AdminDataPageWidget> {
       "origin": "Eldoret Town",
       "destination": "Langas",
       "stages": "Eldoret Town,Rupa's Mall,Kapsoya,Huruma,Langas Estate,Langas",
+      "stages_coordinates": [
+        {"latitude": 0.5143, "longitude": 35.2698},
+        {"latitude": 0.5194, "longitude": 35.2833},
+        {"latitude": 0.5278, "longitude": 35.2917},
+        {"latitude": 0.5361, "longitude": 35.3014},
+        {"latitude": 0.5419, "longitude": 35.3097},
+        {"latitude": 0.5467, "longitude": 35.3158}
+      ],
       "is_verified": true
     },
     {
@@ -135,6 +243,14 @@ class _AdminDataPageWidgetState extends State<AdminDataPageWidget> {
       "origin": "Eldoret Town",
       "destination": "Pioneer",
       "stages": "Eldoret Town,Uganda Road,Kipkaren,West Indies,Pioneer Estate,Pioneer",
+      "stages_coordinates": [
+        {"latitude": 0.5143, "longitude": 35.2698},
+        {"latitude": 0.5156, "longitude": 35.2589},
+        {"latitude": 0.5167, "longitude": 35.2475},
+        {"latitude": 0.5181, "longitude": 35.2372},
+        {"latitude": 0.5203, "longitude": 35.2281},
+        {"latitude": 0.5228, "longitude": 35.2211}
+      ],
       "is_verified": true
     },
     {
@@ -142,6 +258,14 @@ class _AdminDataPageWidgetState extends State<AdminDataPageWidget> {
       "origin": "Eldoret Town",
       "destination": "Elgon View",
       "stages": "Eldoret Town,Oginga Odinga Street,Race Course,Kapseret,Elgon View Estate,Elgon View",
+      "stages_coordinates": [
+        {"latitude": 0.5143, "longitude": 35.2698},
+        {"latitude": 0.5172, "longitude": 35.2731},
+        {"latitude": 0.5214, "longitude": 35.2775},
+        {"latitude": 0.5272, "longitude": 35.2836},
+        {"latitude": 0.5328, "longitude": 35.2911},
+        {"latitude": 0.5369, "longitude": 35.2978}
+      ],
       "is_verified": true
     },
     {
@@ -149,6 +273,13 @@ class _AdminDataPageWidgetState extends State<AdminDataPageWidget> {
       "origin": "Kisumu Town",
       "destination": "Kondele",
       "stages": "Kisumu Town,Kibuye Market,Jubilee Market,Kondele Roundabout,Kondele",
+      "stages_coordinates": [
+        {"latitude": -0.0917, "longitude": 34.768},
+        {"latitude": -0.0931, "longitude": 34.7653},
+        {"latitude": -0.0958, "longitude": 34.7628},
+        {"latitude": -0.1006, "longitude": 34.7592},
+        {"latitude": -0.1017, "longitude": 34.7581}
+      ],
       "is_verified": true
     },
     {
@@ -156,6 +287,14 @@ class _AdminDataPageWidgetState extends State<AdminDataPageWidget> {
       "origin": "Kisumu Town",
       "destination": "Mamboleo",
       "stages": "Kisumu Town,Kibuye Market,Kondele,Nyamasaria,Mamboleo Estate,Mamboleo",
+      "stages_coordinates": [
+        {"latitude": -0.0917, "longitude": 34.768},
+        {"latitude": -0.0931, "longitude": 34.7653},
+        {"latitude": -0.1017, "longitude": 34.7581},
+        {"latitude": -0.1097, "longitude": 34.7522},
+        {"latitude": -0.1139, "longitude": 34.7478},
+        {"latitude": -0.1169, "longitude": 34.7444}
+      ],
       "is_verified": true
     },
     {
@@ -163,6 +302,14 @@ class _AdminDataPageWidgetState extends State<AdminDataPageWidget> {
       "origin": "Kisumu Town",
       "destination": "Manyatta",
       "stages": "Kisumu Town,Kibuye Market,Kondele,Railway Station,Manyatta Estate,Manyatta",
+      "stages_coordinates": [
+        {"latitude": -0.0917, "longitude": 34.768},
+        {"latitude": -0.0931, "longitude": 34.7653},
+        {"latitude": -0.1017, "longitude": 34.7581},
+        {"latitude": -0.0953, "longitude": 34.7597},
+        {"latitude": -0.0892, "longitude": 34.7736},
+        {"latitude": -0.0858, "longitude": 34.7808}
+      ],
       "is_verified": true
     },
     {
@@ -170,6 +317,14 @@ class _AdminDataPageWidgetState extends State<AdminDataPageWidget> {
       "origin": "Kondele",
       "destination": "Mamboleo",
       "stages": "Kondele,Kondele Roundabout,Nyamasaria,Migosi,Mamboleo Junction,Mamboleo",
+      "stages_coordinates": [
+        {"latitude": -0.1017, "longitude": 34.7581},
+        {"latitude": -0.1006, "longitude": 34.7592},
+        {"latitude": -0.1097, "longitude": 34.7522},
+        {"latitude": -0.1122, "longitude": 34.75},
+        {"latitude": -0.1153, "longitude": 34.7461},
+        {"latitude": -0.1169, "longitude": 34.7444}
+      ],
       "is_verified": true
     },
   ];
