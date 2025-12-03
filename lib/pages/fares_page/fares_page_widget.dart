@@ -31,7 +31,7 @@ class _FaresPageWidgetState extends State<FaresPageWidget> {
   google_maps.GoogleMapController? _mapController;
   Set<google_maps.Marker> _markers = {};
   List<google_maps.LatLng> _stageCoordinates = [];
-  bool _isLoadingMap = true;
+  bool _markersLoaded = false;
 
   @override
   void initState() {
@@ -48,40 +48,48 @@ class _FaresPageWidgetState extends State<FaresPageWidget> {
 
   // Load stage coordinates from stored data (no API calls needed!)
   void _loadStageMarkers(String stages, List<LatLng> coordinates) {
-    if (coordinates.isEmpty) {
-      setState(() {
-        _isLoadingMap = false;
-      });
-      return;
-    }
+    if (coordinates.isEmpty || _markersLoaded) return;
 
     final stageList = stages.split(',').map((s) => s.trim()).toList();
     final googleCoordinates = <google_maps.LatLng>[];
     final markers = <google_maps.Marker>{};
 
     for (int i = 0; i < coordinates.length && i < stageList.length; i++) {
-      final coord = google_maps.LatLng(coordinates[i].latitude, coordinates[i].longitude);
+      final coord =
+          google_maps.LatLng(coordinates[i].latitude, coordinates[i].longitude);
       googleCoordinates.add(coord);
 
       markers.add(google_maps.Marker(
         markerId: google_maps.MarkerId('stage_$i'),
         position: coord,
         icon: i == 0
-            ? google_maps.BitmapDescriptor.defaultMarkerWithHue(google_maps.BitmapDescriptor.hueGreen)
+            ? google_maps.BitmapDescriptor.defaultMarkerWithHue(
+                google_maps.BitmapDescriptor.hueGreen)
             : i == stageList.length - 1
-                ? google_maps.BitmapDescriptor.defaultMarkerWithHue(google_maps.BitmapDescriptor.hueRed)
-                : google_maps.BitmapDescriptor.defaultMarkerWithHue(google_maps.BitmapDescriptor.hueBlue),
+                ? google_maps.BitmapDescriptor.defaultMarkerWithHue(
+                    google_maps.BitmapDescriptor.hueRed)
+                : google_maps.BitmapDescriptor.defaultMarkerWithHue(
+                    google_maps.BitmapDescriptor.hueBlue),
         infoWindow: google_maps.InfoWindow(
           title: stageList[i],
-          snippet: i == 0 ? 'Origin' : i == stageList.length - 1 ? 'Destination' : 'Stage ${i + 1}',
+          snippet: i == 0
+              ? 'Origin'
+              : i == stageList.length - 1
+                  ? 'Destination'
+                  : 'Stage ${i + 1}',
         ),
       ));
     }
 
-    setState(() {
-      _stageCoordinates = googleCoordinates;
-      _markers = markers;
-      _isLoadingMap = false;
+    // Schedule setState to run after the current build phase completes
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted) {
+        setState(() {
+          _stageCoordinates = googleCoordinates;
+          _markers = markers;
+          _markersLoaded = true;
+        });
+      }
     });
   }
 
@@ -158,9 +166,9 @@ class _FaresPageWidgetState extends State<FaresPageWidget> {
               title: Text(
                 'Route Not Found',
                 style: FlutterFlowTheme.of(context).headlineMedium.override(
-                  font: GoogleFonts.interTight(),
-                  color: Colors.white,
-                ),
+                      font: GoogleFonts.interTight(),
+                      color: Colors.white,
+                    ),
               ),
             ),
             body: Center(
@@ -191,10 +199,11 @@ class _FaresPageWidgetState extends State<FaresPageWidget> {
                     options: FFButtonOptions(
                       padding: EdgeInsetsDirectional.fromSTEB(24, 12, 24, 12),
                       color: FlutterFlowTheme.of(context).primary,
-                      textStyle: FlutterFlowTheme.of(context).titleSmall.override(
-                        font: GoogleFonts.interTight(),
-                        color: Colors.white,
-                      ),
+                      textStyle:
+                          FlutterFlowTheme.of(context).titleSmall.override(
+                                font: GoogleFonts.interTight(),
+                                color: Colors.white,
+                              ),
                       borderRadius: BorderRadius.circular(12),
                     ),
                   ),
@@ -217,16 +226,20 @@ class _FaresPageWidgetState extends State<FaresPageWidget> {
           builder: (context, routeSnapshot) {
             if (!routeSnapshot.hasData) {
               return Scaffold(
-                backgroundColor: FlutterFlowTheme.of(context).secondaryBackground,
+                backgroundColor:
+                    FlutterFlowTheme.of(context).secondaryBackground,
                 body: Center(child: CircularProgressIndicator()),
               );
             }
 
-            final routeRecord = routeSnapshot.data!.isNotEmpty ? routeSnapshot.data!.first : null;
+            final routeRecord = routeSnapshot.data!.isNotEmpty
+                ? routeSnapshot.data!.first
+                : null;
 
             // Load stage markers when route data is available (using stored coordinates - no API calls!)
-            if (routeRecord != null && _markers.isEmpty && !_isLoadingMap) {
-              _loadStageMarkers(routeRecord.stages, routeRecord.stagesCoordinates);
+            if (routeRecord != null && !_markersLoaded) {
+              _loadStageMarkers(
+                  routeRecord.stages, routeRecord.stagesCoordinates);
             }
 
             final isPeak = _isPeakHour(
@@ -234,7 +247,9 @@ class _FaresPageWidgetState extends State<FaresPageWidget> {
               faresPageFaresRecord.peakHoursEnd,
             );
             final currentFare = isPeak
-                ? (faresPageFaresRecord.standardFare * faresPageFaresRecord.peakMultiplier).round()
+                ? (faresPageFaresRecord.standardFare *
+                        faresPageFaresRecord.peakMultiplier)
+                    .round()
                 : faresPageFaresRecord.standardFare;
 
             return GestureDetector(
@@ -265,10 +280,10 @@ class _FaresPageWidgetState extends State<FaresPageWidget> {
                   title: Text(
                     'Fare Details',
                     style: FlutterFlowTheme.of(context).headlineMedium.override(
-                      font: GoogleFonts.interTight(),
-                      color: Colors.white,
-                      fontSize: 22.0,
-                    ),
+                          font: GoogleFonts.interTight(),
+                          color: Colors.white,
+                          fontSize: 22.0,
+                        ),
                   ),
                   centerTitle: false,
                   elevation: 2.0,
@@ -298,30 +313,36 @@ class _FaresPageWidgetState extends State<FaresPageWidget> {
                             children: [
                               // Origin → Destination
                               Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
                                 children: [
                                   Flexible(
                                     child: Column(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
                                       children: [
                                         Text(
                                           'FROM',
-                                          style: FlutterFlowTheme.of(context).bodySmall.override(
-                                            font: GoogleFonts.inter(),
-                                            color: Colors.white70,
-                                            fontSize: 12.0,
-                                            fontWeight: FontWeight.w500,
-                                          ),
+                                          style: FlutterFlowTheme.of(context)
+                                              .bodySmall
+                                              .override(
+                                                font: GoogleFonts.inter(),
+                                                color: Colors.white70,
+                                                fontSize: 12.0,
+                                                fontWeight: FontWeight.w500,
+                                              ),
                                         ),
                                         SizedBox(height: 4.0),
                                         Text(
                                           routeRecord?.origin ?? 'Origin',
-                                          style: FlutterFlowTheme.of(context).headlineSmall.override(
-                                            font: GoogleFonts.interTight(),
-                                            color: Colors.white,
-                                            fontSize: 18.0,
-                                            fontWeight: FontWeight.bold,
-                                          ),
+                                          style: FlutterFlowTheme.of(context)
+                                              .headlineSmall
+                                              .override(
+                                                font: GoogleFonts.interTight(),
+                                                color: Colors.white,
+                                                fontSize: 18.0,
+                                                fontWeight: FontWeight.bold,
+                                              ),
                                           maxLines: 2,
                                           overflow: TextOverflow.ellipsis,
                                         ),
@@ -329,7 +350,8 @@ class _FaresPageWidgetState extends State<FaresPageWidget> {
                                     ),
                                   ),
                                   Padding(
-                                    padding: EdgeInsets.symmetric(horizontal: 16.0),
+                                    padding:
+                                        EdgeInsets.symmetric(horizontal: 16.0),
                                     child: Icon(
                                       Icons.arrow_forward,
                                       color: Colors.white,
@@ -338,26 +360,32 @@ class _FaresPageWidgetState extends State<FaresPageWidget> {
                                   ),
                                   Flexible(
                                     child: Column(
-                                      crossAxisAlignment: CrossAxisAlignment.end,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.end,
                                       children: [
                                         Text(
                                           'TO',
-                                          style: FlutterFlowTheme.of(context).bodySmall.override(
-                                            font: GoogleFonts.inter(),
-                                            color: Colors.white70,
-                                            fontSize: 12.0,
-                                            fontWeight: FontWeight.w500,
-                                          ),
+                                          style: FlutterFlowTheme.of(context)
+                                              .bodySmall
+                                              .override(
+                                                font: GoogleFonts.inter(),
+                                                color: Colors.white70,
+                                                fontSize: 12.0,
+                                                fontWeight: FontWeight.w500,
+                                              ),
                                         ),
                                         SizedBox(height: 4.0),
                                         Text(
-                                          routeRecord?.destination ?? 'Destination',
-                                          style: FlutterFlowTheme.of(context).headlineSmall.override(
-                                            font: GoogleFonts.interTight(),
-                                            color: Colors.white,
-                                            fontSize: 18.0,
-                                            fontWeight: FontWeight.bold,
-                                          ),
+                                          routeRecord?.destination ??
+                                              'Destination',
+                                          style: FlutterFlowTheme.of(context)
+                                              .headlineSmall
+                                              .override(
+                                                font: GoogleFonts.interTight(),
+                                                color: Colors.white,
+                                                fontSize: 18.0,
+                                                fontWeight: FontWeight.bold,
+                                              ),
                                           maxLines: 2,
                                           overflow: TextOverflow.ellipsis,
                                           textAlign: TextAlign.right,
@@ -378,7 +406,9 @@ class _FaresPageWidgetState extends State<FaresPageWidget> {
                             width: double.infinity,
                             padding: EdgeInsets.all(24.0),
                             decoration: BoxDecoration(
-                              color: isPeak ? Color(0xFFFFEBEE) : Color(0xFFE8F5E9),
+                              color: isPeak
+                                  ? Color(0xFFFFEBEE)
+                                  : Color(0xFFE8F5E9),
                               borderRadius: BorderRadius.circular(16.0),
                               boxShadow: [
                                 BoxShadow(
@@ -394,49 +424,66 @@ class _FaresPageWidgetState extends State<FaresPageWidget> {
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
                                     if (isPeak)
-                                      Icon(Icons.trending_up, color: Color(0xFFD32F2F), size: 20.0),
+                                      Icon(Icons.trending_up,
+                                          color: Color(0xFFD32F2F), size: 20.0),
                                     if (!isPeak)
-                                      Icon(Icons.check_circle, color: Color(0xFF388E3C), size: 20.0),
+                                      Icon(Icons.check_circle,
+                                          color: Color(0xFF388E3C), size: 20.0),
                                     SizedBox(width: 8.0),
                                     Text(
                                       isPeak ? 'PEAK HOURS' : 'OFF-PEAK',
-                                      style: FlutterFlowTheme.of(context).bodySmall.override(
-                                        font: GoogleFonts.inter(),
-                                        color: isPeak ? Color(0xFFD32F2F) : Color(0xFF388E3C),
-                                        fontSize: 14.0,
-                                        fontWeight: FontWeight.w700,
-                                        letterSpacing: 1.2,
-                                      ),
+                                      style: FlutterFlowTheme.of(context)
+                                          .bodySmall
+                                          .override(
+                                            font: GoogleFonts.inter(),
+                                            color: isPeak
+                                                ? Color(0xFFD32F2F)
+                                                : Color(0xFF388E3C),
+                                            fontSize: 14.0,
+                                            fontWeight: FontWeight.w700,
+                                            letterSpacing: 1.2,
+                                          ),
                                     ),
                                   ],
                                 ),
                                 SizedBox(height: 12.0),
                                 Text(
                                   'Current Fare',
-                                  style: FlutterFlowTheme.of(context).bodyMedium.override(
-                                    font: GoogleFonts.inter(),
-                                    color: FlutterFlowTheme.of(context).secondaryText,
-                                  ),
+                                  style: FlutterFlowTheme.of(context)
+                                      .bodyMedium
+                                      .override(
+                                        font: GoogleFonts.inter(),
+                                        color: FlutterFlowTheme.of(context)
+                                            .secondaryText,
+                                      ),
                                 ),
                                 SizedBox(height: 8.0),
                                 Text(
                                   'KSh $currentFare',
-                                  style: FlutterFlowTheme.of(context).displaySmall.override(
-                                    font: GoogleFonts.interTight(),
-                                    color: isPeak ? Color(0xFFD32F2F) : Color(0xFF388E3C),
-                                    fontSize: 48.0,
-                                    fontWeight: FontWeight.bold,
-                                  ),
+                                  style: FlutterFlowTheme.of(context)
+                                      .displaySmall
+                                      .override(
+                                        font: GoogleFonts.interTight(),
+                                        color: isPeak
+                                            ? Color(0xFFD32F2F)
+                                            : Color(0xFF388E3C),
+                                        fontSize: 48.0,
+                                        fontWeight: FontWeight.bold,
+                                      ),
                                 ),
                                 if (isPeak) ...[
                                   SizedBox(height: 8.0),
                                   Text(
                                     'Base fare: KSh ${faresPageFaresRecord.standardFare}',
-                                    style: FlutterFlowTheme.of(context).bodySmall.override(
-                                      font: GoogleFonts.inter(),
-                                      color: FlutterFlowTheme.of(context).secondaryText,
-                                      decoration: TextDecoration.lineThrough,
-                                    ),
+                                    style: FlutterFlowTheme.of(context)
+                                        .bodySmall
+                                        .override(
+                                          font: GoogleFonts.inter(),
+                                          color: FlutterFlowTheme.of(context)
+                                              .secondaryText,
+                                          decoration:
+                                              TextDecoration.lineThrough,
+                                        ),
                                   ),
                                 ],
                               ],
@@ -481,7 +528,8 @@ class _FaresPageWidgetState extends State<FaresPageWidget> {
                             width: double.infinity,
                             padding: EdgeInsets.all(16.0),
                             decoration: BoxDecoration(
-                              color: FlutterFlowTheme.of(context).secondaryBackground,
+                              color: FlutterFlowTheme.of(context)
+                                  .secondaryBackground,
                               borderRadius: BorderRadius.circular(12.0),
                               border: Border.all(
                                 color: FlutterFlowTheme.of(context).alternate,
@@ -493,32 +541,43 @@ class _FaresPageWidgetState extends State<FaresPageWidget> {
                               children: [
                                 Row(
                                   children: [
-                                    Icon(Icons.schedule, size: 20.0, color: FlutterFlowTheme.of(context).primary),
+                                    Icon(Icons.schedule,
+                                        size: 20.0,
+                                        color: FlutterFlowTheme.of(context)
+                                            .primary),
                                     SizedBox(width: 8.0),
                                     Text(
                                       'Peak Hours',
-                                      style: FlutterFlowTheme.of(context).titleSmall.override(
-                                        font: GoogleFonts.interTight(),
-                                        fontWeight: FontWeight.w600,
-                                      ),
+                                      style: FlutterFlowTheme.of(context)
+                                          .titleSmall
+                                          .override(
+                                            font: GoogleFonts.interTight(),
+                                            fontWeight: FontWeight.w600,
+                                          ),
                                     ),
                                   ],
                                 ),
                                 SizedBox(height: 12.0),
                                 Text(
                                   '${faresPageFaresRecord.peakHoursStarts} - ${faresPageFaresRecord.peakHoursEnd}',
-                                  style: FlutterFlowTheme.of(context).headlineSmall.override(
-                                    font: GoogleFonts.interTight(),
-                                    color: FlutterFlowTheme.of(context).primary,
-                                  ),
+                                  style: FlutterFlowTheme.of(context)
+                                      .headlineSmall
+                                      .override(
+                                        font: GoogleFonts.interTight(),
+                                        color: FlutterFlowTheme.of(context)
+                                            .primary,
+                                      ),
                                 ),
                                 SizedBox(height: 8.0),
                                 Text(
                                   'Fares increase by ${((faresPageFaresRecord.peakMultiplier - 1) * 100).toStringAsFixed(0)}% during peak hours',
-                                  style: FlutterFlowTheme.of(context).bodySmall.override(
-                                    font: GoogleFonts.inter(),
-                                    color: FlutterFlowTheme.of(context).secondaryText,
-                                  ),
+                                  style: FlutterFlowTheme.of(context)
+                                      .bodySmall
+                                      .override(
+                                        font: GoogleFonts.inter(),
+                                        color: FlutterFlowTheme.of(context)
+                                            .secondaryText,
+                                      ),
                                 ),
                               ],
                             ),
@@ -533,10 +592,12 @@ class _FaresPageWidgetState extends State<FaresPageWidget> {
                             padding: EdgeInsets.symmetric(horizontal: 16.0),
                             child: Text(
                               'Route Stages',
-                              style: FlutterFlowTheme.of(context).titleLarge.override(
-                                font: GoogleFonts.interTight(),
-                                fontWeight: FontWeight.w600,
-                              ),
+                              style: FlutterFlowTheme.of(context)
+                                  .titleLarge
+                                  .override(
+                                    font: GoogleFonts.interTight(),
+                                    fontWeight: FontWeight.w600,
+                                  ),
                             ),
                           ),
                           SizedBox(height: 12.0),
@@ -556,49 +617,84 @@ class _FaresPageWidgetState extends State<FaresPageWidget> {
                               ),
                               child: ClipRRect(
                                 borderRadius: BorderRadius.circular(12.0),
-                                child: _isLoadingMap
-                                    ? Center(child: CircularProgressIndicator())
-                                    : _stageCoordinates.isNotEmpty
-                                        ? google_maps.GoogleMap(
-                                            initialCameraPosition: google_maps.CameraPosition(
-                                              target: _stageCoordinates.first,
-                                              zoom: 11.0,
-                                            ),
-                                            markers: _markers,
-                                            onMapCreated: (controller) {
-                                              _mapController = controller;
-                                              // Fit bounds to show all markers
-                                              if (_stageCoordinates.length > 1) {
-                                                double minLat = _stageCoordinates.first.latitude;
-                                                double maxLat = _stageCoordinates.first.latitude;
-                                                double minLng = _stageCoordinates.first.longitude;
-                                                double maxLng = _stageCoordinates.first.longitude;
+                                child: _stageCoordinates.isNotEmpty
+                                    ? google_maps.GoogleMap(
+                                        initialCameraPosition:
+                                            google_maps.CameraPosition(
+                                          target: _stageCoordinates.first,
+                                          zoom: 11.0,
+                                        ),
+                                        markers: _markers,
+                                        myLocationButtonEnabled: false,
+                                        zoomControlsEnabled: true,
+                                        mapToolbarEnabled: false,
+                                        onMapCreated: (controller) {
+                                          _mapController = controller;
+                                          // Fit bounds to show all markers (delayed slightly for better performance)
+                                          if (_stageCoordinates.length > 1) {
+                                            Future.delayed(
+                                                Duration(milliseconds: 300),
+                                                () {
+                                              if (!mounted) return;
+                                              double minLat = _stageCoordinates
+                                                  .first.latitude;
+                                              double maxLat = _stageCoordinates
+                                                  .first.latitude;
+                                              double minLng = _stageCoordinates
+                                                  .first.longitude;
+                                              double maxLng = _stageCoordinates
+                                                  .first.longitude;
 
-                                                for (var coord in _stageCoordinates) {
-                                                  if (coord.latitude < minLat) minLat = coord.latitude;
-                                                  if (coord.latitude > maxLat) maxLat = coord.latitude;
-                                                  if (coord.longitude < minLng) minLng = coord.longitude;
-                                                  if (coord.longitude > maxLng) maxLng = coord.longitude;
-                                                }
-
-                                                controller.animateCamera(
-                                                  google_maps.CameraUpdate.newLatLngBounds(
-                                                    google_maps.LatLngBounds(
-                                                      southwest: google_maps.LatLng(minLat, minLng),
-                                                      northeast: google_maps.LatLng(maxLat, maxLng),
-                                                    ),
-                                                    50.0,
-                                                  ),
-                                                );
+                                              for (var coord
+                                                  in _stageCoordinates) {
+                                                if (coord.latitude < minLat)
+                                                  minLat = coord.latitude;
+                                                if (coord.latitude > maxLat)
+                                                  maxLat = coord.latitude;
+                                                if (coord.longitude < minLng)
+                                                  minLng = coord.longitude;
+                                                if (coord.longitude > maxLng)
+                                                  maxLng = coord.longitude;
                                               }
-                                            },
-                                          )
-                                        : Center(
-                                            child: Text(
-                                              'Unable to load map',
-                                              style: FlutterFlowTheme.of(context).bodyMedium,
+
+                                              controller.animateCamera(
+                                                google_maps.CameraUpdate
+                                                    .newLatLngBounds(
+                                                  google_maps.LatLngBounds(
+                                                    southwest:
+                                                        google_maps.LatLng(
+                                                            minLat, minLng),
+                                                    northeast:
+                                                        google_maps.LatLng(
+                                                            maxLat, maxLng),
+                                                  ),
+                                                  80.0,
+                                                ),
+                                              );
+                                            });
+                                          }
+                                        },
+                                      )
+                                    : Center(
+                                        child: Column(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: [
+                                            Icon(Icons.map_outlined,
+                                                size: 48.0,
+                                                color:
+                                                    FlutterFlowTheme.of(context)
+                                                        .secondaryText),
+                                            SizedBox(height: 12.0),
+                                            Text(
+                                              'Loading map...',
+                                              style:
+                                                  FlutterFlowTheme.of(context)
+                                                      .bodyMedium,
                                             ),
-                                          ),
+                                          ],
+                                        ),
+                                      ),
                               ),
                             ),
                           ),
@@ -606,7 +702,8 @@ class _FaresPageWidgetState extends State<FaresPageWidget> {
                           // Stage List
                           Padding(
                             padding: EdgeInsets.symmetric(horizontal: 16.0),
-                            child: _buildStagesList(context, routeRecord.stages),
+                            child:
+                                _buildStagesList(context, routeRecord.stages),
                           ),
                         ],
 
@@ -623,7 +720,8 @@ class _FaresPageWidgetState extends State<FaresPageWidget> {
     );
   }
 
-  Widget _buildInfoCard(BuildContext context, String title, String value, IconData icon, Color color) {
+  Widget _buildInfoCard(BuildContext context, String title, String value,
+      IconData icon, Color color) {
     return Container(
       padding: EdgeInsets.all(16.0),
       decoration: BoxDecoration(
@@ -644,19 +742,19 @@ class _FaresPageWidgetState extends State<FaresPageWidget> {
           Text(
             title,
             style: FlutterFlowTheme.of(context).bodySmall.override(
-              font: GoogleFonts.inter(),
-              color: FlutterFlowTheme.of(context).secondaryText,
-            ),
+                  font: GoogleFonts.inter(),
+                  color: FlutterFlowTheme.of(context).secondaryText,
+                ),
             textAlign: TextAlign.center,
           ),
           SizedBox(height: 4.0),
           Text(
             value,
             style: FlutterFlowTheme.of(context).titleMedium.override(
-              font: GoogleFonts.interTight(),
-              color: color,
-              fontWeight: FontWeight.bold,
-            ),
+                  font: GoogleFonts.interTight(),
+                  color: color,
+                  fontWeight: FontWeight.bold,
+                ),
           ),
         ],
       ),
@@ -697,10 +795,10 @@ class _FaresPageWidgetState extends State<FaresPageWidget> {
                     child: Text(
                       '${i + 1}',
                       style: FlutterFlowTheme.of(context).bodySmall.override(
-                        font: GoogleFonts.inter(),
-                        color: Colors.white,
-                        fontWeight: FontWeight.bold,
-                      ),
+                            font: GoogleFonts.inter(),
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                          ),
                     ),
                   ),
                 ),
@@ -709,9 +807,11 @@ class _FaresPageWidgetState extends State<FaresPageWidget> {
                   child: Text(
                     stageList[i],
                     style: FlutterFlowTheme.of(context).bodyMedium.override(
-                      font: GoogleFonts.inter(),
-                      fontWeight: i == 0 || i == stageList.length - 1 ? FontWeight.w600 : FontWeight.normal,
-                    ),
+                          font: GoogleFonts.inter(),
+                          fontWeight: i == 0 || i == stageList.length - 1
+                              ? FontWeight.w600
+                              : FontWeight.normal,
+                        ),
                   ),
                 ),
               ],
